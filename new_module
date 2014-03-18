@@ -1,0 +1,35 @@
+#!/bin/sh
+
+name=$1
+if [ "x$name" == "x" ]
+then
+    echo "Usage: $0 <module name>" >&2
+    exit 1
+fi
+
+msrc=src/${name}.c
+mhdr=include/${name}.h
+mtst=tests/${name}_test.cpp
+
+nameuc=$(echo -n $name | tr [a-z] [A-Z])
+
+function process_template()
+{
+    sed -e "s/xx__xx/$name/g" -e "s/XX__XX/$nameuc/g" < $1 > $2
+}
+
+if ! [ -e $msrc ]
+then
+    process_template module_source.template $msrc
+fi
+
+if ! [ -e $mhdr ]
+then
+    process_template module_header.template $mhdr
+fi
+
+if ! [ -e $mtst ]
+then
+    process_template module_test.template $mtst
+fi
+

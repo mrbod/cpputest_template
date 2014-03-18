@@ -1,0 +1,8 @@
+syntax: glob
+*.o
+*~
+*.swp
+*.gcov
+cscope.out
+gmon.out
+
