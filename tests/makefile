@@ -11,8 +11,8 @@ CXXFLAGS = $(CFLAGS)
 
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
-ifeq($(strip TESTS),)
-    error "No tests found"
+ifeq ($(strip $(TESTS)),)
+    $(error No tests found)
 endif
 
 all: check_all
