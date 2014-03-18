@@ -1,35 +1,37 @@
-#!/bin/sh
+#!/usr/bin/env python
+import sys
+import re
+import os.path
 
-name=$1
-if [ "x$name" == "x" ]
-then
-    echo "Usage: $0 <module name>" >&2
-    exit 1
-fi
+templates = ( ('module_header.template', 'include/{0}.h')
+        , ('module_source.template', 'src/{0}.c')
+        , ('module_test.template', 'tests/{0}_test.cpp'))
 
-msrc=src/${name}.c
-mhdr=include/${name}.h
-mtst=tests/${name}_test.cpp
+def process_template(template, output, name):
+    source = open(template).read()
+    source = source.replace('XX__XX', name.upper())
+    source = source.replace('xx__xx', name)
+    open(output, 'w').write(source)
 
-nameuc=$(echo -n $name | tr [a-z] [A-Z])
+def new_module(name):
+    for tmplt, offmt in templates:
+        of = offmt.format(name)
+        if not os.path.exists(of):
+            process_template(tmplt, of, name)
 
-function process_template()
-{
-    sed -e "s/xx__xx/$name/g" -e "s/XX__XX/$nameuc/g" < $1 > $2
-}
+def usage():
+    prg = os.path.basename(sys.argv[0])
+    s = 'Usage: {0} <module name>\n'.format(prg)
+    sys.stderr.write(s)
 
-if ! [ -e $msrc ]
-then
-    process_template module_source.template $msrc
-fi
+def main():
+    try:
+        name = sys.argv[1]
+        new_module(name)
+    except IndexError:
+        usage()
+        sys.exit(1)
 
-if ! [ -e $mhdr ]
-then
-    process_template module_header.template $mhdr
-fi
-
-if ! [ -e $mtst ]
-then
-    process_template module_test.template $mtst
-fi
+if __name__ == '__main__':
+    main()
 
