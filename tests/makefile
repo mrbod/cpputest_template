@@ -12,11 +12,12 @@ CXXFLAGS = $(CFLAGS)
 LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 ifeq ($(strip $(TESTS)),)
-    $(error No tests found)
+fail:
+	$(error No tests found)
 endif
 
 all: check_all
-	check_all
+	check_all -v
 
 check_all: $(TEST_OBJS) $(TARGET)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LD_LIBRARIES)
