@@ -3,7 +3,7 @@ import sys
 import re
 import os.path
 
-templates = ( ('module_header.template', 'include/{0}.h')
+templates = ( ('module_header.template', 'src/{0}.h')
         , ('module_source.template', 'src/{0}.c')
         , ('module_test.template', 'tests/{0}_test.cpp'))
 
