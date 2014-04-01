@@ -3,6 +3,7 @@
 # like so:
 # export CODE_UNDER_TEST = stuff.c things.c
 #
+
 TESTS = $(CODE_UNDER_TEST:.c=_test.cpp)
 ifeq ($(strip $(TESTS)),)
 $(error No tests found)
