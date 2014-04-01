@@ -1,8 +1,9 @@
 # Code Under Test
-# CUT = stuff.c things.c
-CUT = 
-
-TESTS = $(CUT:.c=_test.cpp)
+# Define and export variable CODE_UNDER_TEST in your top level makefile
+# like so:
+# export CODE_UNDER_TEST = stuff.c things.c
+#
+TESTS = $(CODE_UNDER_TEST:.c=_test.cpp)
 ifeq ($(strip $(TESTS)),)
 $(error No tests found)
 endif
@@ -10,7 +11,7 @@ endif
 TEST_OBJS = check_all.o
 TEST_OBJS += $(TESTS:.cpp=.o)
 
-CUT_OBJS = $(CUT:.c=.o)
+CUT_OBJS = $(CODE_UNDER_TEST:.c=.o)
 
 OBJS = $(TEST_OBJS) $(CUT_OBJS)
 
