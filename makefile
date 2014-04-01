@@ -1,33 +1,47 @@
-export PROJECT_PATH = $(shell pwd)
+# Code Under Test
+# CUT = stuff.c things.c
+CUT = 
 
-export TARGET = $(PROJECT_PATH)/libstuff.a
+TESTS = $(CUT:.c=_test.cpp)
+ifeq ($(strip $(TESTS)),)
+$(error No tests found)
+endif
 
-INCLUDE = -I $(PROJECT_PATH)/include
-export INCLUDE
+TEST_OBJS = check_all.o
+TEST_OBJS += $(TESTS:.cpp=.o)
 
-CPPFLAGS = -MP -MMD -MT $@ -MT $(@:.o=.d)
+CUT_OBJS = $(CUT:.c=.o)
+
+OBJS = $(TEST_OBJS) $(CUT_OBJS)
+
+INCLUDE += -I $(PROJECT_PATH)/src
+INCLUDE += -I $(CPPUTEST_HOME)/include
+
 CPPFLAGS += $(INCLUDE)
-export CPPFLAGS
 
-CFLAGS = -Wall
 CFLAGS += -O0 -g
 CFLAGS += --coverage
 CFLAGS += -pg
-export CFLAGS
 
-SUBTARGETS = src tests
+CXXFLAGS = $(CFLAGS)
 
-.PHONY: $(SUBTARGETS)
+LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
-all: $(SUBTARGETS)
+vpath %.c $(PROJECT_PATH)/src
 
-$(SUBTARGETS):
-	$(MAKE) -C $@
+TEST_RUNNER = check_all
 
-coverage:
-	(cd src && gcov *.o)
+all: $(TEST_RUNNER)
+	$(TEST_RUNNER)
+
+$(TEST_RUNNER): $(OBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LD_LIBRARIES)
+
+coverage: $(CUT_OBJS)
+	gcov $^
 
 clean:
-	rm -rf *~ $(TARGET)
-	@for t in $(SUBTARGETS); do $(MAKE) -C $$t clean; done
+	rm -rf *.o *.d *~ $(TEST_RUNNER) gmon.out *.gcov *.gcda *.gcno
+
+-include $(OBJS:.o=.d)
 
