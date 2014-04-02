@@ -3,21 +3,18 @@ import sys
 import re
 import os.path
 
-module_header = '''
-#ifndef XX__XX_H
+module_header = '''#ifndef XX__XX_H
 #define XX__XX_H
 
 #endif
 
 '''
 
-module_source = '''
-#include "xx__xx.h"
+module_source = '''#include "xx__xx.h"
 
 '''
 
-module_test = '''
-extern "C" {
+module_test = '''extern "C" {
 #include "xx__xx.h"
 }
 
