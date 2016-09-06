@@ -24,7 +24,6 @@ CUT_OBJS = $(CODE_UNDER_TEST:.c=.o)
 OBJS = $(TEST_OBJS) $(CUT_OBJS)
 
 INCLUDE += -I $(PROJECT_PATH)/src
-INCLUDE += -I $(CPPUTEST_HOME)/include
 
 CPPFLAGS += $(INCLUDE)
 
@@ -34,7 +33,7 @@ CFLAGS += -pg
 
 CXXFLAGS = $(CFLAGS)
 
-LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
+LD_LIBRARIES = -lCppUTest -lCppUTestExt
 
 vpath %.c $(PROJECT_PATH)/src
 vpath %.cpp $(TESTS_PATH)
