@@ -59,10 +59,10 @@ def usage():
 def main():
     try:
         name = sys.argv[1]
-        new_module(name)
     except IndexError:
         usage()
         sys.exit(1)
+    new_module(name)
 
 if __name__ == '__main__':
     main()
