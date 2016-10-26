@@ -36,8 +36,8 @@ TEST(xx__xx, init)
 
 '''
 
-templates = ( (module_header, 'src/{0}.h')
-        , (module_source, 'src/{0}.c')
+templates = ( (module_header, '{0}.h')
+        , (module_source, '{0}.c')
         , (module_test, 'tests/{0}_test.cpp'))
 
 def process_template(template, output, name):

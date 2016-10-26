@@ -23,19 +23,22 @@ CUT_OBJS = $(CODE_UNDER_TEST:.c=.o)
 
 OBJS = $(TEST_OBJS) $(CUT_OBJS)
 
-INCLUDE += -I $(PROJECT_PATH)/src
+INCLUDE += -I $(PROJECT_PATH)
 
 CPPFLAGS += $(INCLUDE)
 
+CFLAGS += $(CPPFLAGS)
+CFLAGS += -Wall
 CFLAGS += -O0 -g
 CFLAGS += --coverage
 CFLAGS += -pg
 
-CXXFLAGS = $(CFLAGS)
+CXXFLAGS = $(CPPFLAGS)
+CXXFLAGS += -O2
 
-LD_LIBRARIES = -lCppUTest -lCppUTestExt
+LD_LIBRARIES = -lgcov -lCppUTest -lCppUTestExt
 
-vpath %.c $(PROJECT_PATH)/src
+vpath %.c $(PROJECT_PATH)
 vpath %.cpp $(TESTS_PATH)
 
 TEST_RUNNER = check_all
@@ -45,7 +48,7 @@ TEST_RUNNER = check_all
 all: $(TEST_RUNNER) run_tests coverage
 
 $(TEST_RUNNER): $(OBJS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LD_LIBRARIES)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LD_LIBRARIES)
 
 run_tests:
 	$(TEST_RUNNER)
