@@ -1,0 +1,8 @@
+*.o
+*~
+*.swp
+*.gcda
+*.gcov
+*.gcno
+gmon.out
+check_all
